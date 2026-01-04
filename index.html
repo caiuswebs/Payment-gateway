@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>₹1 Payment Test</title>
+    <style>
+        body { font-family: sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; background: #f0f2f5; }
+        .card { background: #fff; padding: 2rem; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); text-align: center; width: 300px; }
+        button { background: #007bff; color: white; border: none; padding: 12px 20px; border-radius: 6px; cursor: pointer; width: 100%; font-size: 16px; font-weight: bold; }
+        button:disabled { background: #ccc; }
+        #msg { margin-top: 15px; font-size: 14px; color: #333; }
+        .err { color: #dc3545; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h2>Test Payment</h2>
+        <p>Amount: ₹1</p>
+        <button id="payBtn" onclick="handlePayment()">Pay ₹1</button>
+        <div id="msg"></div>
+    </div>
+
+    <script>
+        async function handlePayment() {
+            const btn = document.getElementById('payBtn');
+            const msg = document.getElementById('msg');
+            
+            btn.disabled = true;
+            msg.innerText = "Creating order...";
+            msg.className = "";
+
+            try {
+                const response = await fetch('/api/create-order', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ amount: 1 })
+                });
+
+                const data = await response.json();
+
+                if (data.status) {
+                    msg.innerText = "Redirecting...";
+                    window.location.href = data.result.payment_url;
+                } else {
+                    throw new Error(data.message || "Failed to create order");
+                }
+            } catch (err) {
+                msg.innerText = err.message;
+                msg.className = "err";
+                btn.disabled = false;
+            }
+        }
+    </script>
+</body>
+</html>
