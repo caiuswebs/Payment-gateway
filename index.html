@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pay with UPI</title>
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<main>
+  <h1>Pay with UPI</h1>
+  <label for="amount">Amount (INR)</label>
+  <input id="amount" type="number" min="1" step="0.01" inputmode="decimal" placeholder="499.00">
+  <label for="name">Your name (optional)</label>
+  <input id="name" type="text" maxlength="60" autocomplete="name">
+  <button id="go" type="button">Generate payment link</button>
+  <p id="err" role="alert"></p>
+
+  <section id="out" hidden aria-live="polite">
+    <img id="qr" alt="UPI QR code" width="220" height="220">
+    <div class="links">
+      <a id="checkout" target="_blank" rel="noopener noreferrer">Open checkout page</a>
+      <a id="intent" hidden>Open in UPI app</a>
+    </div>
+    <div class="row"><span>Order</span><span id="oid"></span></div>
+    <div class="row"><span>Amount</span><span id="amt"></span></div>
+    <div class="row"><span>Expires</span><span id="exp"></span></div>
+    <div id="status">Waiting for payment...</div>
+  </section>
+</main>
+<script src="/app.js"></script>
+</body>
+</html>
